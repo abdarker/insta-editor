@@ -1,57 +1,69 @@
-import domtoimage from "dom-to-image";
-import { saveAs } from "file-saver";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import ImageUpload from "./ImageUpload";
 import { Button } from "./ui/button";
 const MainContent: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const imgResultRef = useRef<HTMLImageElement>(null);
 
-  //   Idk if it even works
-  //   const handleDownloadImage = () => {
-  //     if (imgResultRef.current) {
-  //       const imageSrc = imgResultRef.current.currentSrc;
-  //       const link = document.createElement("a");
-  //       link.href = imageSrc;
-  //       link.download = "downloaded_image.png";
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       document.body.removeChild(link);
+  //   const handleDownloadImage = useCallback(() => {
+  //     if (imgResultRef.current === null) {
+  //       return;
   //     }
-  //   };
 
-  //   Using Dom to Image
+  //     toPng(imgResultRef.current, { cacheBust: true })
+  //       .then((dataUrl) => {
+  //         const link = document.createElement("a");
+  //         link.download = "my-image-name.png";
+  //         link.href = dataUrl;
+  //         link.click();
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }, [imgResultRef]);
 
-  const handleDownloadImage = () => {
-    if (imgResultRef.current) {
-      domtoimage
-        .toBlob(imgResultRef.current)
-        .then(function (blob) {
-          saveAs(blob, "result.png");
-        })
-        .catch(function (error) {
-          console.error("ooops, something went wrong!", error);
-        });
+  const handleDownloadImage = useCallback(() => {
+    if (imgResultRef.current === null) {
+      return;
     }
-  };
+    try {
+      const imgElement = imgResultRef.current;
+      const canvas = document.createElement("canvas");
+      // if i take this size image file size becomes enormus,
+      canvas.width = imgResultRef.current?.naturalWidth;
+      canvas.height = imgResultRef.current?.naturalHeight;
+      const ctx = canvas.getContext("2d");
 
-  //   console.log('My Log: ',imgResultRef.current.width )
+      // Draw image onto canvas
+      ctx?.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/png");
+
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "download.png";
+      a.click();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [imgResultRef]);
 
   return (
     <div className="container mx-auto px-4">
-      <div>
+      <div className="py-4">
         <ImageUpload setSelectedImage={setSelectedImage} />
         {selectedImage && (
-          <div>
+          <div className="mt-4">
             <img
-              className="h-full w-full grayscale"
+              className="h-full w-full grayscale custom-filter" // i want to add custom css filter as well
               src={selectedImage}
-              alt="Preview"
+              alt="Selected Image"
               ref={imgResultRef}
             />
           </div>
         )}
-        <Button onClick={handleDownloadImage}>Download</Button>
+        <Button className="mt-4" onClick={handleDownloadImage}>
+          Download
+        </Button>
       </div>
     </div>
   );
