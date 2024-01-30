@@ -13,7 +13,7 @@ const Slider: React.FC<props> = ({
 }: props) => {
   return (
     <div>
-      <label className="md:text-lg text-sm md:font-semibold font-medium">
+      <label className="md:text-base text-sm">
         {label}: {value}%
       </label>
       <div className="relative -mt-3">
