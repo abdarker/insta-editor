@@ -11,3 +11,27 @@
 body {
   font-family: "Geist Sans", sans-serif;
 }
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  border-radius: 100%;
+  background-color: black;
+  height: 12px;
+  width: 12px;
+  cursor: pointer;
+}
+.range::-ms-thumb {
+  border-radius: 100%;
+  background-color: black;
+  height: 14px;
+  width: 14px;
+  border: none;
+}
+.range::-moz-range-thumb {
+  border-radius: 20px;
+  height: 14px;
+  width: 14px;
+  border: none;
+  background: none;
+  background-color: black;
+}
