@@ -1,6 +1,0 @@
-Instagram posts can be square, landscape, or vertical. All images will be cropped to a square in the feed.
-The ideal size for square posts is 1080px by 1080px at a 1:1 aspect ratio.
-For landscape posts, use an image that is 1080px by 566px, with an aspect ratio of 1.91:1.
-Vertical images should be sized at 1080px by 1350px with a 4:5 aspect ratio.
-
-logo size: 668x190
